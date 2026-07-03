@@ -1,0 +1,11 @@
+{
+  "name": "aether-onboarding-flow",
+  "version": "1.0.0",
+  "description": "Aether AI mobile onboarding flow prototype and handoff inspector",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx -y http-server -p 8080"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether AI - Mobile Onboarding Prototype & Dev Mode</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-circle">A</div>
+      <div>
+        <h1>Aether AI</h1>
+        <p class="subtitle">Onboarding Flow & Design System Specs</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="mode-toggle-container">
+        <button id="btn-proto-mode" class="mode-btn active" onclick="switchMainMode('prototype')">
+          <span class="icon">📱</span> Interactive Prototype
+        </button>
+        <button id="btn-inspect-mode" class="mode-btn" onclick="switchMainMode('inspect')">
+          <span class="icon">🔍</span> Dev Mode Inspector
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout -->
+  <main class="main-dashboard">
+    
+    <!-- LEFT PANEL: Simulator & Controls -->
+    <section class="simulator-panel">
+      <div class="panel-header">
+        <h2>Mobile Simulator</h2>
+        <span class="device-tag">iPhone 15 Pro</span>
+      </div>
+
+      <!-- iPhone Simulator Frame -->
+      <div class="device-outer-frame" id="device-frame">
+        <!-- Physical Speaker/Notch (Dynamic Island) -->
+        <div class="dynamic-island">
+          <div class="camera-lens"></div>
+        </div>
+
+        <div class="device-screen">
+          
+          <!-- Status Bar -->
+          <div class="status-bar">
+            <span class="time" id="status-time">09:41</span>
+            <div class="status-icons">
+              <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+                <path d="M2 3h1v5H2zM5 1h1v7H5zM8 0h1v8H8zM11 2h1v6h-1z" opacity="0.4"/>
+                <rect x="14" y="2" width="3" height="6" rx="1"/>
+              </svg>
+              <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor">
+                <path d="M13.2 2A7.2 7.2 0 0 0 7.5 0a7.2 7.2 0 0 0-5.7 2L7.5 11 13.2 2z"/>
+              </svg>
+              <span class="battery">100%</span>
+            </div>
+          </div>
+
+          <!-- Screen Container (Holds the 5 screens) -->
+          <div class="screens-viewport" id="screens-viewport">
+            
+            <!-- SCREEN 1: Welcome -->
+            <div class="screen-slide active" id="screen-1" data-screen-index="1">
+              <div class="screen-content scroll-container">
+                <div class="screen-header-logo">
+                  <div class="app-logo-gradient">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="32" height="32" rx="8" fill="url(#logoGrad)" />
+                      <circle cx="16" cy="16" r="8" fill="#ffffff" fill-opacity="0.2" />
+                      <path d="M12 16L15 19L20 13" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                      <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32">
+                          <stop offset="0%" stop-color="#8B5CF6"/>
+                          <stop offset="100%" stop-color="#3B82F6"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  <span class="app-name">Aether</span>
+                </div>
+
+                <div class="illustration-container">
+                  <img src="assets/welcome_img.svg" alt="Welcome to Aether" class="vector-illustration hover-inspectable" id="el-welcome-ill">
+                </div>
+
+                <div class="screen-copy-group">
+                  <h3 class="screen-title hover-inspectable" id="el-welcome-title">Optimize Your Life with AI</h3>
+                  <p class="screen-desc hover-inspectable" id="el-welcome-desc">Aether orchestrates your schedule, notes, and tasks with intelligent agentic assistance.</p>
+                </div>
+
+                <div class="screen-footer-group">
+                  <button class="btn btn-primary hover-inspectable" id="btn-welcome-start" onclick="navigateToScreen(2)">
+                    Get Started
+                  </button>
+                  <button class="btn btn-link hover-inspectable" id="btn-welcome-skip" onclick="navigateToScreen(4)">
+                    Skip
+                  </button>
+                  
+                  <div class="nav-indicators hover-inspectable" id="el-welcome-indicator">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 2: Permissions -->
+            <div class="screen-slide" id="screen-2" data-screen-index="2">
+              <!-- Sticky Back Button -->
+              <div class="screen-top-bar">
+                <button class="back-arrow hover-inspectable" onclick="navigateToScreen(1)">←</button>
+                <span class="top-title hover-inspectable">Permissions</span>
+              </div>
+              
+              <div class="screen-content scroll-container with-top-bar">
+                <div class="screen-copy-group">
+                  <h3 class="screen-title hover-inspectable" id="el-perm-title">Enable Powers</h3>
+                  <p class="screen-desc hover-inspectable" id="el-perm-desc">Aether requires the following permissions to automate actions securely in the background.</p>
+                </div>
+
+                <!-- Permission Cards Container -->
+                <div class="permission-list hover-inspectable" id="el-perm-list">
+                  
+                  <!-- Notifications Card -->
+                  <div class="permission-card active-border" id="card-perm-notify" onclick="togglePermission('notify')">
+                    <div class="card-icon-wrapper">
+                      <img src="assets/icon_bell.svg" alt="Notifications">
+                    </div>
+                    <div class="card-text-wrapper">
+                      <h4>Smart Notifications</h4>
+                      <p>Get proactive updates and action cues before tasks slip away.</p>
+                    </div>
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="chk-perm-notify" checked>
+                      <span class="slider"></span>
+                    </div>
+                  </div>
+
+                  <!-- Camera Card -->
+                  <div class="permission-card" id="card-perm-camera" onclick="togglePermission('camera')">
+                    <div class="card-icon-wrapper">
+                      <img src="assets/icon_camera.svg" alt="Camera">
+                    </div>
+                    <div class="card-text-wrapper">
+                      <h4>Visual Assistant</h4>
+                      <p>Scan documents, extract key info, and snap instant tasks.</p>
+                    </div>
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="chk-perm-camera">
+                      <span class="slider"></span>
+                    </div>
+                  </div>
+
+                  <!-- Location Card -->
+                  <div class="permission-card" id="card-perm-location" onclick="togglePermission('location')">
+                    <div class="card-icon-wrapper">
+                      <img src="assets/icon_location.svg" alt="Location">
+                    </div>
+                    <div class="card-text-wrapper">
+                      <h4>Ambient Context</h4>
+                      <p>Trigger seamless location-based schedules and routines.</p>
+                    </div>
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="chk-perm-location">
+                      <span class="slider"></span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="screen-footer-group">
+                  <button class="btn btn-primary hover-inspectable" id="btn-perm-allow" onclick="handlePermissionAllow()">
+                    Allow Selected & Continue
+                  </button>
+                  <button class="btn btn-secondary hover-inspectable" id="btn-perm-skip" onclick="handlePermissionNotNow()">
+                    Not Now
+                  </button>
+                  
+                  <div class="nav-indicators hover-inspectable">
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Conditional Alert Overlay inside Phone -->
+              <div class="phone-overlay" id="perm-reminder-overlay">
+                <div class="overlay-dialog">
+                  <div class="dialog-icon">⚠️</div>
+                  <h4>Ambient Actions Disabled</h4>
+                  <p>Without background context, Aether will run in manual mode. You can toggle permission switches in App Settings at any time.</p>
+                  <div class="dialog-buttons">
+                    <button class="btn-dialog-back" onclick="hidePermReminder()">Go Back</button>
+                    <button class="btn-dialog-continue" onclick="confirmSkipPermissions()">Proceed</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 3: Personalization -->
+            <div class="screen-slide" id="screen-3" data-screen-index="3">
+              <!-- Sticky Back Button -->
+              <div class="screen-top-bar">
+                <button class="back-arrow hover-inspectable" onclick="navigateToScreen(2)">←</button>
+                <span class="top-title hover-inspectable">Personalization</span>
+              </div>
+              
+              <div class="screen-content scroll-container with-top-bar">
+                <div class="screen-copy-group">
+                  <h3 class="screen-title hover-inspectable" id="el-personal-title">Select Interests</h3>
+                  <p class="screen-desc hover-inspectable" id="el-personal-desc">Choose categories to optimize your assistant's default memory and knowledge layers.</p>
+                </div>
+
+                <!-- Interactive Chip Grid -->
+                <div class="interest-grid hover-inspectable" id="el-interest-grid">
+                  <div class="interest-chip" id="chip-tech" onclick="toggleInterest('tech')">
+                    <span class="chip-emoji">💻</span> Technology
+                  </div>
+                  <div class="interest-chip" id="chip-edu" onclick="toggleInterest('edu')">
+                    <span class="chip-emoji">📚</span> Education
+                  </div>
+                  <div class="interest-chip" id="chip-health" onclick="toggleInterest('health')">
+                    <span class="chip-emoji">🧘</span> Health
+                  </div>
+                  <div class="interest-chip" id="chip-finance" onclick="toggleInterest('finance')">
+                    <span class="chip-emoji">📈</span> Finance
+                  </div>
+                  <div class="interest-chip" id="chip-sports" onclick="toggleInterest('sports')">
+                    <span class="chip-emoji">⚽</span> Sports
+                  </div>
+                  <div class="interest-chip" id="chip-entertain" onclick="toggleInterest('entertain')">
+                    <span class="chip-emoji">🎬</span> Entertainment
+                  </div>
+                </div>
+
+                <div class="screen-footer-group">
+                  <!-- Disabled initially, dynamic active states -->
+                  <button class="btn btn-primary hover-inspectable disabled" id="btn-personal-continue" onclick="handlePersonalizationContinue()" disabled>
+                    Continue
+                  </button>
+                  <p class="disabled-reminder-text" id="interest-reminder">Please select at least 1 interest to enable the button.</p>
+                  
+                  <div class="nav-indicators hover-inspectable">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 4: Account Setup -->
+            <div class="screen-slide" id="screen-4" data-screen-index="4">
+              <!-- Sticky Back Button -->
+              <div class="screen-top-bar">
+                <button class="back-arrow hover-inspectable" onclick="navigateToScreen(3)">←</button>
+                <span class="top-title hover-inspectable">Account Setup</span>
+              </div>
+              
+              <div class="screen-content scroll-container with-top-bar">
+                <div class="screen-copy-group">
+                  <h3 class="screen-title hover-inspectable" id="el-account-title">Join Aether</h3>
+                  <p class="screen-desc hover-inspectable" id="el-account-desc">Establish a decentralized agent memory card to sync across all your devices.</p>
+                </div>
+
+                <!-- Account OAuth Grid -->
+                <div class="oauth-stack hover-inspectable" id="el-oauth-stack">
+                  <button class="oauth-card" onclick="triggerMockLogin('Google')">
+                    <img src="assets/icon_google.svg" alt="Google">
+                    <span>Continue with Google</span>
+                  </button>
+                  
+                  <button class="oauth-card" onclick="triggerMockLogin('Apple')">
+                    <div class="apple-icon-dark">
+                      <img src="assets/icon_apple.svg" alt="Apple">
+                    </div>
+                    <span>Continue with Apple</span>
+                  </button>
+
+                  <button class="oauth-card" id="btn-oauth-email" onclick="expandEmailInput()">
+                    <img src="assets/icon_email.svg" alt="Email">
+                    <span>Continue with Email</span>
+                  </button>
+
+                  <!-- Expanded Email Container -->
+                  <div class="email-input-container" id="email-form-container">
+                    <input type="email" placeholder="Enter your email address" id="txt-input-email" oninput="validateEmail()">
+                    <button class="btn btn-primary btn-sm disabled" id="btn-submit-email" onclick="triggerMockLogin('Email')" disabled>
+                      Verify & Continue
+                    </button>
+                  </div>
+                </div>
+
+                <div class="screen-footer-group">
+                  <div class="signin-footer hover-inspectable" id="el-account-signin-link">
+                    Already have an account? <a href="#" onclick="alert('Mock Login triggered for existing user.')">Sign In</a>
+                  </div>
+                  
+                  <div class="nav-indicators hover-inspectable">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mock OAuth Loading Screen Overlay -->
+              <div class="phone-overlay" id="loading-overlay">
+                <div class="loading-content">
+                  <div class="spinner"></div>
+                  <h4 id="loading-text">Synchronizing security keys...</h4>
+                  <p>Initializing secure cognitive vault</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 5: Ready to Explore -->
+            <div class="screen-slide" id="screen-5" data-screen-index="5">
+              <div class="screen-content scroll-container">
+                
+                <div class="illustration-container">
+                  <img src="assets/success_img.svg" alt="Success Illustration" class="vector-illustration hover-inspectable" id="el-success-ill">
+                </div>
+
+                <div class="screen-copy-group">
+                  <h3 class="screen-title hover-inspectable" id="el-success-title">You're All Set!</h3>
+                  <p class="screen-desc hover-inspectable" id="el-success-desc">Aether has structured your knowledge vault. Let's begin exploring the dashboard.</p>
+                </div>
+
+                <div class="screen-footer-group">
+                  <button class="btn btn-primary hover-inspectable" id="btn-success-start" onclick="handleFinishOnboarding()">
+                    Start Exploring
+                  </button>
+                  
+                  <div class="nav-indicators hover-inspectable">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot active"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Home Indicator Bar (Simulated iOS) -->
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- Quick Simulator Console (Screen Jumper) -->
+      <div class="simulator-controls">
+        <span class="control-label">Quick Jump:</span>
+        <div class="jump-buttons">
+          <button onclick="navigateToScreen(1)">S1</button>
+          <button onclick="navigateToScreen(2)">S2</button>
+          <button onclick="navigateToScreen(3)">S3</button>
+          <button onclick="navigateToScreen(4)">S4</button>
+          <button onclick="navigateToScreen(5)">S5</button>
+        </div>
+        <button class="btn-reset-flow" onclick="resetPrototype()">🔄 Reset Prototype</button>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Handoff & Inspector -->
+    <section class="dashboard-tabs-panel">
+      <!-- Tabs Navigation -->
+      <div class="tabs-nav">
+        <button class="tab-btn active" id="tab-btn-handoff" onclick="switchRightTab('handoff')">
+          📁 Developer Handoff
+        </button>
+        <button class="tab-btn" id="tab-btn-components" onclick="switchRightTab('components')">
+          🧩 Component Library
+        </button>
+        <button class="tab-btn" id="tab-btn-assets" onclick="switchRightTab('assets')">
+          🖼️ Export Assets
+        </button>
+        <button class="tab-btn" id="tab-btn-inspector" onclick="switchRightTab('inspector')">
+          🔍 Element Inspector
+        </button>
+      </div>
+
+      <!-- Scrollable Tab Content Container -->
+      <div class="tabs-content scroll-container">
+        
+        <!-- TAB 1: DEVELOPER HANDOFF -->
+        <div class="tab-pane active" id="pane-handoff">
+          <h2 class="pane-title">Aether Design Specifications</h2>
+          <p class="pane-subtitle">Handoff tokens and guidelines matching Figma design specs.</p>
+          
+          <hr class="divider">
+
+          <!-- Theme Colors -->
+          <h3>Color Palette</h3>
+          <p class="section-desc">Consistent use of core, accent, and background dark styles.</p>
+          <div class="color-grid">
+            <div class="color-token" onclick="copyText('#1E1B4B')">
+              <div class="color-swatch" style="background-color: #1E1B4B; border: 1px solid #4F46E5;"></div>
+              <div class="color-meta">
+                <span class="color-name">Deep Navy (Card BG)</span>
+                <span class="color-hex">#1E1B4B</span>
+              </div>
+            </div>
+            <div class="color-token" onclick="copyText('#0F172A')">
+              <div class="color-swatch" style="background-color: #0F172A;"></div>
+              <div class="color-meta">
+                <span class="color-name">Slate Dark (App BG)</span>
+                <span class="color-hex">#0F172A</span>
+              </div>
+            </div>
+            <div class="color-token" onclick="copyText('#3B82F6')">
+              <div class="color-swatch" style="background-color: #3B82F6;"></div>
+              <div class="color-meta">
+                <span class="color-name">Electric Blue (Primary)</span>
+                <span class="color-hex">#3B82F6</span>
+              </div>
+            </div>
+            <div class="color-token" onclick="copyText('#8B5CF6')">
+              <div class="color-swatch" style="background-color: #8B5CF6;"></div>
+              <div class="color-meta">
+                <span class="color-name">Vibrant Violet (Accent)</span>
+                <span class="color-hex">#8B5CF6</span>
+              </div>
+            </div>
+            <div class="color-token" onclick="copyText('#06B6D4')">
+              <div class="color-swatch" style="background-color: #06B6D4;"></div>
+              <div class="color-meta">
+                <span class="color-name">Cyan Neon (Highlight)</span>
+                <span class="color-hex">#06B6D4</span>
+              </div>
+            </div>
+            <div class="color-token" onclick="copyText('#FFFFFF')">
+              <div class="color-swatch" style="background-color: #FFFFFF; border: 1px solid #E2E8F0;"></div>
+              <div class="color-meta">
+                <span class="color-name">Neutral White (Text High)</span>
+                <span class="color-hex">#FFFFFF</span>
+              </div>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <!-- Typography system -->
+          <h3>Typography System</h3>
+          <div class="typography-tokens">
+            <div class="typo-row">
+              <span class="typo-tag">Display H1</span>
+              <div class="typo-spec">Outfit, Bold 28px / line-height 36px</div>
+              <div class="typo-preview" style="font-family: 'Outfit'; font-weight: 700; font-size: 28px;">Optimize Your Life</div>
+            </div>
+            <div class="typo-row">
+              <span class="typo-tag">Header H2</span>
+              <div class="typo-spec">Outfit, SemiBold 22px / line-height 28px</div>
+              <div class="typo-preview" style="font-family: 'Outfit'; font-weight: 600; font-size: 22px;">Enable Powers</div>
+            </div>
+            <div class="typo-row">
+              <span class="typo-tag">Body Main</span>
+              <div class="typo-spec">Inter, Regular 14px / line-height 22px</div>
+              <div class="typo-preview" style="font-family: 'Inter'; font-weight: 400; font-size: 14px; color: #94A3B8;">Aether orchestrates your schedule, notes, and tasks.</div>
+            </div>
+            <div class="typo-row">
+              <span class="typo-tag">Component Button</span>
+              <div class="typo-spec">Inter, SemiBold 16px / line-height 24px</div>
+              <div class="typo-preview" style="font-family: 'Inter'; font-weight: 600; font-size: 16px;">Get Started</div>
+            </div>
+            <div class="typo-row">
+              <span class="typo-tag">Card Label</span>
+              <div class="typo-spec">Inter, Medium 13px / line-height 18px</div>
+              <div class="typo-preview" style="font-family: 'Inter'; font-weight: 500; font-size: 13px;">Smart Notifications</div>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <!-- Spacing -->
+          <h3>Auto Layout & Spacing Scale</h3>
+          <p class="section-desc">Standard components enforce 8px increments matching mobile base grids.</p>
+          <div class="spacing-list">
+            <div class="spacing-item">
+              <div class="spacing-block" style="width: 8px; height: 8px;"></div>
+              <span class="spacing-name">8px</span>
+              <span class="spacing-desc">Tights (chips gap, small icon/label padding)</span>
+            </div>
+            <div class="spacing-item">
+              <div class="spacing-block" style="width: 16px; height: 16px;"></div>
+              <span class="spacing-name">16px</span>
+              <span class="spacing-desc">Mediums (card paddings, button layout gaps)</span>
+            </div>
+            <div class="spacing-item">
+              <div class="spacing-block" style="width: 24px; height: 24px;"></div>
+              <span class="spacing-name">24px</span>
+              <span class="spacing-desc">Larges (standard margin bounds, outer page gutters)</span>
+            </div>
+            <div class="spacing-item">
+              <div class="spacing-block" style="width: 32px; height: 32px;"></div>
+              <span class="spacing-name">32px</span>
+              <span class="spacing-desc">Ex-Larges (illustration margins, footer paddings)</span>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <!-- Prototyping details -->
+          <h3>Prototype Animation Settings</h3>
+          <div class="animation-grid">
+            <div class="anim-token">
+              <span class="anim-label">Transition Pattern</span>
+              <span class="anim-value">Smart Animate (Slide + Fade)</span>
+            </div>
+            <div class="anim-token">
+              <span class="anim-label">Standard Duration</span>
+              <span class="anim-value">400 ms</span>
+            </div>
+            <div class="anim-token">
+              <span class="anim-label">Easing Function</span>
+              <span class="anim-value">cubic-bezier(0.25, 1, 0.5, 1) [Ease Out]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: COMPONENT LIBRARY -->
+        <div class="tab-pane" id="pane-components">
+          <h2 class="pane-title">Figma Component Set</h2>
+          <p class="pane-subtitle">Inspect interactive states of the UI components used.</p>
+          
+          <hr class="divider">
+
+          <!-- Primary Button Set -->
+          <h3>Buttons</h3>
+          <p class="section-desc">Uses vertical and horizontal padding auto layout.</p>
+          <div class="component-demo-box">
+            <div class="demo-wrapper">
+              <span class="demo-label">Default State</span>
+              <button class="btn btn-primary" style="pointer-events: none;">Primary Button</button>
+            </div>
+            <div class="demo-wrapper">
+              <span class="demo-label">Hover State</span>
+              <button class="btn btn-primary hover-state-preview" style="pointer-events: none;">Primary Button</button>
+            </div>
+            <div class="demo-wrapper">
+              <span class="demo-label">Pressed State</span>
+              <button class="btn btn-primary pressed-state-preview" style="pointer-events: none;">Primary Button</button>
+            </div>
+            <div class="demo-wrapper">
+              <span class="demo-label">Disabled State</span>
+              <button class="btn btn-primary disabled" style="pointer-events: none;" disabled>Primary Button</button>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <!-- Interest Chips -->
+          <h3>Interest Chips</h3>
+          <p class="section-desc">Compact chips for filter selections with active toggle transitions.</p>
+          <div class="component-demo-box">
+            <div class="demo-wrapper">
+              <span class="demo-label">Unselected State</span>
+              <div class="interest-chip" style="pointer-events: none;">💻 Technology</div>
+            </div>
+            <div class="demo-wrapper">
+              <span class="demo-label">Selected State</span>
+              <div class="interest-chip active" style="pointer-events: none;">💻 Technology</div>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <!-- Permission Cards -->
+          <h3>Permission Cards</h3>
+          <p class="section-desc">Auto layout card with leading icon, body label, and switch on trailing edge.</p>
+          <div class="component-demo-box flex-column">
+            <div class="demo-wrapper-full">
+              <span class="demo-label">Normal state (Toggle Off)</span>
+              <div class="permission-card" style="pointer-events: none; width: 100%;">
+                <div class="card-icon-wrapper">
+                  <img src="assets/icon_camera.svg" alt="Camera">
+                </div>
+                <div class="card-text-wrapper">
+                  <h4>Visual Assistant</h4>
+                  <p>Scan documents and extract key info.</p>
+                </div>
+                <div class="toggle-switch">
+                  <span class="slider"></span>
+                </div>
+              </div>
+            </div>
+            <div class="demo-wrapper-full" style="margin-top: 12px;">
+              <span class="demo-label">Active state (Toggle On)</span>
+              <div class="permission-card active-border" style="pointer-events: none; width: 100%;">
+                <div class="card-icon-wrapper">
+                  <img src="assets/icon_camera.svg" alt="Camera">
+                </div>
+                <div class="card-text-wrapper">
+                  <h4>Visual Assistant</h4>
+                  <p>Scan documents and extract key info.</p>
+                </div>
+                <div class="toggle-switch active-toggle">
+                  <span class="slider"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: ASSET EXPORTER -->
+        <div class="tab-pane" id="pane-assets">
+          <h2 class="pane-title">Asset Library</h2>
+          <p class="pane-subtitle">View and export SVG vector codes directly from the design handoff.</p>
+          
+          <hr class="divider">
+
+          <!-- Assets List -->
+          <div class="assets-exporter-grid">
+            
+            <div class="asset-export-card">
+              <div class="asset-preview">
+                <img src="assets/welcome_img.svg" alt="Welcome Image">
+              </div>
+              <div class="asset-info">
+                <h4>welcome_img.svg</h4>
+                <p>Welcome illustration</p>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/welcome_img.svg')">Copy Code</button>
+                  <a href="assets/welcome_img.svg" download class="btn btn-secondary btn-xs">Download</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card">
+              <div class="asset-preview">
+                <img src="assets/success_img.svg" alt="Success Image">
+              </div>
+              <div class="asset-info">
+                <h4>success_img.svg</h4>
+                <p>Success illustration</p>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/success_img.svg')">Copy Code</button>
+                  <a href="assets/success_img.svg" download class="btn btn-secondary btn-xs">Download</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card compact-asset">
+              <div class="asset-preview">
+                <img src="assets/icon_bell.svg" alt="Bell Icon">
+              </div>
+              <div class="asset-info">
+                <h4>icon_bell.svg</h4>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/icon_bell.svg')">Copy Code</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card compact-asset">
+              <div class="asset-preview">
+                <img src="assets/icon_camera.svg" alt="Camera Icon">
+              </div>
+              <div class="asset-info">
+                <h4>icon_camera.svg</h4>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/icon_camera.svg')">Copy Code</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card compact-asset">
+              <div class="asset-preview">
+                <img src="assets/icon_location.svg" alt="Location Icon">
+              </div>
+              <div class="asset-info">
+                <h4>icon_location.svg</h4>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/icon_location.svg')">Copy Code</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card compact-asset">
+              <div class="asset-preview">
+                <img src="assets/icon_google.svg" alt="Google Icon">
+              </div>
+              <div class="asset-info">
+                <h4>icon_google.svg</h4>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/icon_google.svg')">Copy Code</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card compact-asset">
+              <div class="asset-preview">
+                <img src="assets/icon_apple.svg" alt="Apple Icon">
+              </div>
+              <div class="asset-info">
+                <h4>icon_apple.svg</h4>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/icon_apple.svg')">Copy Code</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="asset-export-card compact-asset">
+              <div class="asset-preview">
+                <img src="assets/icon_email.svg" alt="Email Icon">
+              </div>
+              <div class="asset-info">
+                <h4>icon_email.svg</h4>
+                <div class="asset-actions">
+                  <button class="btn btn-primary btn-xs" onclick="copyAssetCode('assets/icon_email.svg')">Copy Code</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB 4: ELEMENT INSPECTOR -->
+        <div class="tab-pane" id="pane-inspector">
+          <h2 class="pane-title">Figma Dev Mode Spec</h2>
+          <p class="pane-subtitle" id="inspector-instruction">Enable **Dev Mode Inspector** in the top header, then hover or click elements inside the mobile phone mockup to inspect their styling specs.</p>
+          
+          <div id="inspector-content" class="inspector-inactive">
+            
+            <div class="inspector-section">
+              <div class="inspector-heading-row">
+                <span class="inspector-element-tag" id="ins-tag-name">div.permission-card</span>
+                <span class="inspector-size-badge" id="ins-dimensions">320 × 72</span>
+              </div>
+            </div>
+
+            <!-- Auto Layout Spec details -->
+            <div class="inspector-section">
+              <h3>Figma Auto Layout Specs</h3>
+              <div class="auto-layout-visual">
+                <div class="visual-box">
+                  <span class="visual-padding top" id="ins-pad-top">16px</span>
+                  <span class="visual-padding left" id="ins-pad-left">16px</span>
+                  <span class="visual-padding right" id="ins-pad-right">16px</span>
+                  <span class="visual-padding bottom" id="ins-pad-bottom">16px</span>
+                  <div class="visual-inner">
+                    <span class="visual-gap" id="ins-gap">12px gap</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="spec-grid">
+                <div class="spec-row">
+                  <span class="spec-label">Direction</span>
+                  <span class="spec-val" id="ins-direction">Horizontal</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">Alignment</span>
+                  <span class="spec-val" id="ins-align">Center</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">Width</span>
+                  <span class="spec-val" id="ins-width">Fill container</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">Height</span>
+                  <span class="spec-val" id="ins-height">Hug contents</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CSS Code Snippet -->
+            <div class="inspector-section">
+              <div class="section-title-row">
+                <h3>CSS Styles</h3>
+                <button class="btn btn-secondary btn-xs" onclick="copyCSS()">Copy CSS</button>
+              </div>
+              <div class="code-editor-box">
+                <pre><code id="ins-css-code" class="language-css">.permission-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+  background-color: #1e1b4b;
+  border-radius: 16px;
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- HTML markup -->
+            <div class="inspector-section">
+              <div class="section-title-row">
+                <h3>HTML Markup</h3>
+                <button class="btn btn-secondary btn-xs" onclick="copyHTML()">Copy HTML</button>
+              </div>
+              <div class="code-editor-box">
+                <pre><code id="ins-html-code" class="language-html">&lt;div class="permission-card"&gt;
+  ...
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Inspector Bounding Box HUD Overlay -->
+  <div id="inspector-overlay-box" class="inspector-hud-box">
+    <div class="hud-label" id="hud-element-name">div</div>
+    <div class="hud-dimensions" id="hud-dimensions-label">0 × 0</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
